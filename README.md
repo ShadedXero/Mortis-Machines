@@ -16,3 +16,6 @@ Auto Crafter Machine can craft the configured items for the machine. The recipe 
 There are a lot more features than the ones listed.
 
 Everything is customizable in the config.yml. If you find any bugs or something which needs to be fixed, Contact me on Discord (None#9529).
+
+Dependencies:
+- ProtocolLib
