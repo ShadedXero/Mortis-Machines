@@ -1,0 +1,115 @@
+settings:
+  radiusX: 3
+  radiusY: 3
+  radiusZ: 3
+structures:
+  SOUND:
+    core-block:
+      strict: false
+      material: NOTE_BLOCK
+      data: minecraft:note_block[instrument=basedrum,note=0,powered=false]
+      vector: 0, 0, 0
+    7d6d6648-41a2-4837-a439-d986c901a2b0:
+      strict: false
+      material: POLISHED_DEEPSLATE
+      data: minecraft:polished_deepslate
+      vector: 0, -1, 0
+  SOUND_2:
+    core-block:
+      strict: false
+      material: NOTE_BLOCK
+      data: minecraft:note_block[instrument=iron_xylophone,note=0,powered=false]
+      vector: 0, 0, 0
+    f8451bcc-b0eb-4c77-817f-58eaffa88354:
+      strict: false
+      material: IRON_BLOCK
+      data: minecraft:iron_block
+      vector: 0, -1, 0
+  TIMER:
+    core-block:
+      strict: false
+      material: LODESTONE
+      data: minecraft:lodestone
+      vector: 0, 0, 0
+    b616a4ec-abb2-4c91-a87d-7371f5c65c61:
+      strict: false
+      material: POLISHED_DEEPSLATE
+      data: minecraft:polished_deepslate
+      vector: 0, -1, 0
+  REMOTE_CONTROL:
+    core-block:
+      strict: false
+      material: REDSTONE_LAMP
+      data: minecraft:redstone_lamp[lit=false]
+      vector: 0, 0, 0
+    3a1e2012-9dd1-49aa-b9d3-bdc78612d721:
+      strict: false
+      material: POLISHED_DEEPSLATE
+      data: minecraft:polished_deepslate
+      vector: 0, -1, 0
+  REMOTE_CONTROL_2:
+    core-block:
+      strict: false
+      material: REDSTONE_LAMP
+      data: minecraft:redstone_lamp[lit=false]
+      vector: 0, 0, 0
+    2621ceca-40e3-42e0-9fd8-d6f71d17d028:
+      strict: false
+      material: IRON_BLOCK
+      data: minecraft:iron_block
+      vector: 0, -1, 0
+  ID_CARD:
+    core-block:
+      strict: false
+      material: TARGET
+      data: minecraft:target[power=0]
+      vector: 0, 0, 0
+    c400df56-ba14-4e92-b2a3-19062fa4c75b:
+      strict: false
+      material: POLISHED_DEEPSLATE
+      data: minecraft:polished_deepslate
+      vector: 0, -1, 0
+  ID_CARD_2:
+    core-block:
+      strict: false
+      material: TARGET
+      data: minecraft:target[power=0]
+      vector: 0, 0, 0
+    0a1baa70-4e76-418f-8102-184b3f992237:
+      strict: false
+      material: IRON_BLOCK
+      data: minecraft:iron_block
+      vector: 0, -1, 0
+  AUTO_CRAFTER:
+    core-block:
+      strict: false
+      material: NETHERITE_BLOCK
+      data: minecraft:netherite_block
+      vector: 0, 0, 0
+    7c80bbd9-4b6c-4e49-834f-274d6091ca3e:
+      strict: false
+      material: POLISHED_DEEPSLATE
+      data: minecraft:polished_deepslate
+      vector: 0, -1, 0
+  AUTO_CRAFTER_2:
+    core-block:
+      strict: false
+      material: NETHERITE_BLOCK
+      data: minecraft:netherite_block
+      vector: 0, 0, 0
+    b009a5fb-530f-4ece-9622-cf217aa163d5:
+      strict: false
+      material: IRON_BLOCK
+      data: minecraft:iron_block
+      vector: 0, -1, 0
+  AUTO_CRAFTER_3:
+    core-block:
+      strict: false
+      material: NETHERITE_BLOCK
+      data: minecraft:netherite_block
+      vector: 0, 0, 0
+    b009a5fb-530f-4ece-9622-cf217aa163d5:
+      strict: false
+      material: DIORITE
+      data: minecraft:diorite
+      vector: 0, -1, 0

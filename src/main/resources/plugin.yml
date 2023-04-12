@@ -1,0 +1,9 @@
+name: MortisMachines
+version: '${project.version}'
+main: me.none030.mortismachines.MortisMachines
+api-version: 1.13
+depend:
+  - ProtocolLib
+commands:
+  machine:
+    aliases: [machines, mortismachine, mortismachines]
