@@ -1,10 +1,11 @@
 package me.none030.mortismachines.machines.timer;
 
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.none030.mortismachines.MortisMachines;
 import me.none030.mortismachines.data.MachineData;
 import me.none030.mortismachines.machines.Machine;
-import me.none030.mortismachines.machines.idcard.IdCardMenu;
 import me.none030.mortismachines.structures.Structure;
 import me.none030.mortismachines.utils.MessageUtils;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -64,6 +65,11 @@ public class TimerListener implements Listener {
         Block block = e.getClickedBlock();
         if (block == null) {
             return;
+        }
+        if (plugin.hasTowny()) {
+            if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                return;
+            }
         }
         if (!timerManager.getCores().contains(block.getLocation())) {
             timerManager.delete(block.getLocation());
@@ -174,7 +180,20 @@ public class TimerListener implements Listener {
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (e.getClickedInventory() == null || !(e.getClickedInventory().getHolder() instanceof TimerMenu)) {
+        Inventory inv = e.getInventory();
+        Inventory clickedInv = e.getClickedInventory();
+        if (inv.getHolder() instanceof TimerMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+        if (clickedInv != null && clickedInv.getHolder() instanceof TimerMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }else {
             return;
         }
         e.setCancelled(true);
@@ -185,7 +204,7 @@ public class TimerListener implements Listener {
             player.sendMessage(editor.getMessage());
             return;
         }
-        TimerMenu menu = (TimerMenu) e.getClickedInventory().getHolder();
+        TimerMenu menu = (TimerMenu) clickedInv.getHolder();
         int slot = e.getRawSlot();
         menu.click(player, slot);
         if (timerManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {

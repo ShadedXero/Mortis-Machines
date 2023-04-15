@@ -21,30 +21,16 @@ public class AutoCrafterData extends MachineData {
     private final String setOfflineKey = "MortisMachinesOffline";
     private final String processingKey = "MortisMachinesProcessing";
     private final String hopperTimeKey = "MortisMachinesHopperTime";
-    private final String requireFuelKey = "MortisMachinesRequireFuel";
 
     public AutoCrafterData(Location core) {
         super(core, MachineType.AUTO_CRAFTER);
     }
 
-    public void create(String id, String structureId, boolean manualMode, boolean online, long time, boolean requireFuel) {
+    public void create(String id, String structureId, boolean manualMode, boolean online, long time) {
         create(id, structureId);
         setManualMode(manualMode);
         setOnline(online);
         setTime(time);
-        setRequireFuel(requireFuel);
-    }
-
-    public boolean isRequireFuel() {
-        String value = get(requireFuelKey);
-        if (value == null) {
-            return false;
-        }
-        return Boolean.parseBoolean(value);
-    }
-
-    public void setRequireFuel(boolean requireFuel) {
-        set(requireFuelKey, Boolean.toString(requireFuel));
     }
 
     public long getHopperTime() {

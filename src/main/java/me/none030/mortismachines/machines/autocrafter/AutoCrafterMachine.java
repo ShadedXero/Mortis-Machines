@@ -17,13 +17,19 @@ import java.util.List;
 
 public class AutoCrafterMachine extends Machine {
 
+    private final String name;
+    private final AutoCrafterProgressType progressType;
+    private final AutoCrafterRestorationType restorationType;
     private final boolean requireFuel;
     private final List<AutoCrafterFuel> fuels;
     private final List<AutoCrafterDefaultRecipe> defaultRecipes;
     private final List<AutoCrafterMaxRecipe> maxRecipes;
 
-    public AutoCrafterMachine(String id, List<Structure> structures, boolean requireFuel, List<AutoCrafterFuel> fuels, List<AutoCrafterDefaultRecipe> defaultRecipes, List<AutoCrafterMaxRecipe> maxRecipes) {
+    public AutoCrafterMachine(String id, List<Structure> structures, String name, AutoCrafterProgressType progressType, AutoCrafterRestorationType restorationType, boolean requireFuel, List<AutoCrafterFuel> fuels, List<AutoCrafterDefaultRecipe> defaultRecipes, List<AutoCrafterMaxRecipe> maxRecipes) {
         super(id, structures);
+        this.name = name;
+        this.progressType = progressType;
+        this.restorationType = restorationType;
         this.requireFuel = requireFuel;
         this.fuels = fuels;
         this.defaultRecipes = defaultRecipes;
@@ -49,7 +55,11 @@ public class AutoCrafterMachine extends Machine {
             if (recipe.isFull(data.getGrid())) {
                 return;
             }else {
-                recipe.addItems(hopper.getInventory(), data);
+                if (restorationType.equals(AutoCrafterRestorationType.STACK)) {
+                    recipe.addItemsByStack(hopper.getInventory(), data);
+                }else {
+                    recipe.addItemsBySingle(hopper.getInventory(), data);
+                }
                 if (requireFuel) {
                     addFuel(hopper.getInventory(), data);
                 }
@@ -223,6 +233,18 @@ public class AutoCrafterMachine extends Machine {
             return getMaxRecipe(key);
         }
         return defaultRecipe;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public AutoCrafterProgressType getProgressType() {
+        return progressType;
+    }
+
+    public AutoCrafterRestorationType getRestorationType() {
+        return restorationType;
     }
 
     public boolean isRequireFuel() {

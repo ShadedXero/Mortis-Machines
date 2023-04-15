@@ -1,5 +1,9 @@
 package me.none030.mortismachines.machines.idcard;
 
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.Town;
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.none030.mortismachines.MortisMachines;
 import me.none030.mortismachines.data.MachineData;
@@ -70,6 +74,11 @@ public class IdCardListener implements Listener {
         Block block = e.getClickedBlock();
         if (block == null) {
             return;
+        }
+        if (plugin.hasTowny()) {
+            if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                return;
+            }
         }
         if (!idCardManager.getCores().contains(block.getLocation())) {
             idCardManager.delete(block.getLocation());
@@ -184,7 +193,20 @@ public class IdCardListener implements Listener {
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (e.getClickedInventory() == null || !(e.getClickedInventory().getHolder() instanceof IdCardMenu)) {
+        Inventory inv = e.getInventory();
+        Inventory clickedInv = e.getClickedInventory();
+        if (inv.getHolder() instanceof IdCardMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+        if (clickedInv != null && clickedInv.getHolder() instanceof IdCardMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }else {
             return;
         }
         e.setCancelled(true);
@@ -195,7 +217,7 @@ public class IdCardListener implements Listener {
             player.sendMessage(editor.getMessage());
             return;
         }
-        IdCardMenu menu = (IdCardMenu) e.getClickedInventory().getHolder();
+        IdCardMenu menu = (IdCardMenu) clickedInv.getHolder();
         int slot = e.getRawSlot();
         ItemStack cursor = e.getCursor();
         ItemStack item = menu.click(player, slot, cursor);

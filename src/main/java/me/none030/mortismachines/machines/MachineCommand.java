@@ -192,6 +192,7 @@ public class MachineCommand implements TabExecutor {
             arguments.add("structure");
             arguments.add("give");
             arguments.add("reload");
+            arguments.add("recipe");
             return arguments;
         }
         if (args.length == 2) {

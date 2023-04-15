@@ -1,11 +1,17 @@
 package me.none030.mortismachines.machines.autocrafter.menus;
 
 import me.none030.mortismachines.MortisMachines;
+import me.none030.mortismachines.machines.Machine;
 import me.none030.mortismachines.machines.autocrafter.AutoCrafterData;
+import me.none030.mortismachines.machines.autocrafter.AutoCrafterMachine;
 import me.none030.mortismachines.machines.autocrafter.AutoCrafterManager;
+import me.none030.mortismachines.machines.autocrafter.AutoCrafterProgressType;
+import me.none030.mortismachines.machines.autocrafter.recipes.AutoCrafterRecipe;
+import me.none030.mortismachines.utils.MessageUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -34,14 +40,20 @@ public class AutoCrafterProgressMenu implements InventoryHolder {
     }
 
     private void create() {
-        menu = Bukkit.createInventory(this, 54, Component.text(autoCrafterManager.getMenuItems().getTitle()));
+        Machine machine = autoCrafterManager.getMachineById().get(data.getId());
+        if (!(machine instanceof AutoCrafterMachine)) {
+            return;
+        }
+        MessageUtils utils = new MessageUtils(autoCrafterManager.getProgressMenuItems().getTitle());
+        utils.replace("%name%", ((AutoCrafterMachine) machine).getName());
+        menu = Bukkit.createInventory(this, 54, Component.text(utils.getMessage()));
         update(data);
     }
 
     public void update(AutoCrafterData data) {
         setData(data);
         for (int i = 0; i < menu.getSize(); i++) {
-            menu.setItem(i, autoCrafterManager.getRecipeMenuItems().getItem("FILTER"));
+            menu.setItem(i, autoCrafterManager.getProgressMenuItems().getItem("FILTER"));
         }
         for (int slot : maxGridSlots) {
             menu.setItem(slot, new ItemStack(Material.AIR));
@@ -93,9 +105,6 @@ public class AutoCrafterProgressMenu implements InventoryHolder {
     }
 
     public ItemStack click(int slot, ItemStack cursor) {
-        if (cursor != null && !cursor.getType().equals(Material.AIR)) {
-            return cursor;
-        }
         if (slot == resultSlot) {
             if (data.getResult() != null) {
                 ItemStack result = data.getResult();
@@ -104,31 +113,73 @@ public class AutoCrafterProgressMenu implements InventoryHolder {
                 return result;
             }
         }
-        if (cursor != null && !cursor.getType().equals(Material.AIR)) {
+        if (data.getGrid() == null) {
             return cursor;
         }
         if (data.isMax()) {
             if (maxGridSlots.contains(slot)) {
-                int index = maxGridSlots.indexOf(slot);
-                ItemStack[] grid = data.getGrid();
-                ItemStack item = grid[index];
-                if (item != null && !item.getType().equals(Material.AIR)) {
-                    grid[index] = new ItemStack(Material.AIR);
-                    data.setGrid(grid);
+                if (cursor == null || cursor.getType().isAir()) {
+                    int index = maxGridSlots.indexOf(slot);
+                    ItemStack[] grid = data.getGrid();
+                    ItemStack item = grid[index];
+                    if (item != null && !item.getType().equals(Material.AIR)) {
+                        grid[index] = new ItemStack(Material.AIR);
+                        data.setGrid(grid);
+                        update(data);
+                        return item;
+                    }
+                }else {
+                    int index = maxGridSlots.indexOf(slot);
+                    Machine machine = autoCrafterManager.getMachineById().get(data.getId());
+                    if (!(machine instanceof AutoCrafterMachine)) {
+                        return cursor;
+                    }
+                    if (!((AutoCrafterMachine) machine).getProgressType().equals(AutoCrafterProgressType.REMOVE_AND_ADD)) {
+                        return cursor;
+                    }
+                    NamespacedKey recipeKey = data.getRecipe();
+                    if (recipeKey == null) {
+                        return cursor;
+                    }
+                    AutoCrafterRecipe recipe = ((AutoCrafterMachine) machine).getRecipe(recipeKey);
+                    if (recipe == null) {
+                        return cursor;
+                    }
+                    recipe.addItem(index, cursor, data);
                     update(data);
-                    return item;
                 }
             }
         }else {
             if (defaultGridSlots.contains(slot)) {
-                int index = defaultGridSlots.indexOf(slot);
-                ItemStack[] grid = data.getGrid();
-                ItemStack item = grid[index];
-                if (item != null && !item.getType().equals(Material.AIR)) {
-                    grid[index] = new ItemStack(Material.AIR);
-                    data.setGrid(grid);
+                if (cursor == null || cursor.getType().isAir()) {
+                    int index = defaultGridSlots.indexOf(slot);
+                    ItemStack[] grid = data.getGrid();
+                    ItemStack item = grid[index];
+                    if (item != null && !item.getType().equals(Material.AIR)) {
+                        grid[index] = new ItemStack(Material.AIR);
+                        data.setGrid(grid);
+                        update(data);
+                        return item;
+                    }
+                }else {
+                    int index = defaultGridSlots.indexOf(slot);
+                    Machine machine = autoCrafterManager.getMachineById().get(data.getId());
+                    if (!(machine instanceof AutoCrafterMachine)) {
+                        return cursor;
+                    }
+                    if (!((AutoCrafterMachine) machine).getProgressType().equals(AutoCrafterProgressType.REMOVE_AND_ADD)) {
+                        return cursor;
+                    }
+                    NamespacedKey recipeKey = data.getRecipe();
+                    if (recipeKey == null) {
+                        return cursor;
+                    }
+                    AutoCrafterRecipe recipe = ((AutoCrafterMachine) machine).getRecipe(recipeKey);
+                    if (recipe == null) {
+                        return cursor;
+                    }
+                    recipe.addItem(index, cursor, data);
                     update(data);
-                    return item;
                 }
             }
         }

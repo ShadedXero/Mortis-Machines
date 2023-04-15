@@ -1,7 +1,10 @@
 package me.none030.mortismachines.machines.autocrafter.menus;
 
+import me.none030.mortismachines.machines.Machine;
 import me.none030.mortismachines.machines.autocrafter.AutoCrafterData;
+import me.none030.mortismachines.machines.autocrafter.AutoCrafterMachine;
 import me.none030.mortismachines.machines.autocrafter.AutoCrafterManager;
+import me.none030.mortismachines.utils.MessageUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -29,7 +32,13 @@ public class AutoCrafterMenu implements InventoryHolder {
     }
 
     private void create() {
-        menu = Bukkit.createInventory(this, 27, Component.text(autoCrafterManager.getMenuItems().getTitle()));
+        Machine machine = autoCrafterManager.getMachineById().get(data.getId());
+        if (!(machine instanceof AutoCrafterMachine)) {
+            return;
+        }
+        MessageUtils utils = new MessageUtils(autoCrafterManager.getMenuItems().getTitle());
+        utils.replace("%name%", ((AutoCrafterMachine) machine).getName());
+        menu = Bukkit.createInventory(this, 27, Component.text(utils.getMessage()));
         update(data);
     }
 
@@ -48,7 +57,13 @@ public class AutoCrafterMenu implements InventoryHolder {
         }else {
             menu.setItem(onlineSlot, autoCrafterManager.getMenuItems().getItem("OFFLINE"));
         }
-        if (data.isRequireFuel()) {
+        menu.setItem(progressSlot, autoCrafterManager.getMenuItems().getItem("PROGRESS"));
+        menu.setItem(recipeSlot, autoCrafterManager.getMenuItems().getItem("RECIPE"));
+        Machine machine = autoCrafterManager.getMachineById().get(data.getId());
+        if (!(machine instanceof AutoCrafterMachine)) {
+            return;
+        }
+        if (((AutoCrafterMachine) machine).isRequireFuel()) {
             if (data.getFuel() != null) {
                 menu.setItem(fuelSlot, data.getFuel());
             } else {
@@ -57,8 +72,6 @@ public class AutoCrafterMenu implements InventoryHolder {
         }else {
             menu.setItem(fuelSlot, autoCrafterManager.getMenuItems().getItem("FUEL_NOT_REQUIRED"));
         }
-        menu.setItem(progressSlot, autoCrafterManager.getMenuItems().getItem("PROGRESS"));
-        menu.setItem(recipeSlot, autoCrafterManager.getMenuItems().getItem("RECIPE"));
     }
 
     public ItemStack click(Player player, int slot, ItemStack cursor) {
@@ -98,7 +111,11 @@ public class AutoCrafterMenu implements InventoryHolder {
             update(data);
         }
         if (slot == fuelSlot) {
-            if (!data.isRequireFuel()) {
+            Machine machine = autoCrafterManager.getMachineById().get(data.getId());
+            if (!(machine instanceof AutoCrafterMachine)) {
+                return cursor;
+            }
+            if (!((AutoCrafterMachine) machine).isRequireFuel()) {
                 return cursor;
             }
             if (data.getFuel() != null) {

@@ -1,5 +1,8 @@
 package me.none030.mortismachines.machines.autocrafter;
 
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
+import me.none030.mortismachines.MortisMachines;
 import me.none030.mortismachines.machines.Machine;
 import me.none030.mortismachines.machines.autocrafter.menus.AutoCrafterMenu;
 import me.none030.mortismachines.machines.autocrafter.menus.AutoCrafterProgressMenu;
@@ -21,6 +24,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class AutoCrafterListener implements Listener {
 
+    private final MortisMachines plugin = MortisMachines.getInstance();
     private final AutoCrafterManager autoCrafterManager;
 
     public AutoCrafterListener(AutoCrafterManager autoCrafterManager) {
@@ -41,7 +45,7 @@ public class AutoCrafterListener implements Listener {
             Structure structure = machine.getStructure(location, true);
             if (structure != null) {
                 AutoCrafterData data = new AutoCrafterData(location);
-                data.create(machine.getId(), structure.getId(), true, false, 0, ((AutoCrafterMachine) machine).isRequireFuel());
+                data.create(machine.getId(), structure.getId(), true, false, 0);
                 autoCrafterManager.add(location);
                 player.sendMessage(autoCrafterManager.getMessage("MACHINE_BUILD"));
                 return;
@@ -58,6 +62,11 @@ public class AutoCrafterListener implements Listener {
         Block block = e.getClickedBlock();
         if (block == null) {
             return;
+        }
+        if (plugin.hasTowny()) {
+            if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                return;
+            }
         }
         if (!autoCrafterManager.getCores().contains(block.getLocation())) {
             autoCrafterManager.delete(block.getLocation());
@@ -111,7 +120,20 @@ public class AutoCrafterListener implements Listener {
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (e.getClickedInventory() == null || !(e.getClickedInventory().getHolder() instanceof AutoCrafterMenu)) {
+        Inventory inv = e.getInventory();
+        Inventory clickedInv = e.getClickedInventory();
+        if (inv.getHolder() instanceof AutoCrafterMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+        if (clickedInv != null && clickedInv.getHolder() instanceof AutoCrafterMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }else {
             return;
         }
         e.setCancelled(true);
@@ -122,7 +144,7 @@ public class AutoCrafterListener implements Listener {
             player.sendMessage(editor.getMessage());
             return;
         }
-        AutoCrafterMenu menu = (AutoCrafterMenu) e.getClickedInventory().getHolder();
+        AutoCrafterMenu menu = (AutoCrafterMenu) clickedInv.getHolder();
         ItemStack cursor = menu.click(player, e.getRawSlot(), e.getCursor());
         e.setCursor(cursor);
         if (autoCrafterManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {
@@ -136,7 +158,20 @@ public class AutoCrafterListener implements Listener {
     @EventHandler
     public void onProgressMenuClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (e.getClickedInventory() == null || !(e.getClickedInventory().getHolder() instanceof AutoCrafterProgressMenu)) {
+        Inventory inv = e.getInventory();
+        Inventory clickedInv = e.getClickedInventory();
+        if (inv.getHolder() instanceof AutoCrafterProgressMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+        if (clickedInv != null && clickedInv.getHolder() instanceof AutoCrafterProgressMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }else {
             return;
         }
         e.setCancelled(true);
@@ -147,7 +182,7 @@ public class AutoCrafterListener implements Listener {
             player.sendMessage(editor.getMessage());
             return;
         }
-        AutoCrafterProgressMenu menu = (AutoCrafterProgressMenu) e.getClickedInventory().getHolder();
+        AutoCrafterProgressMenu menu = (AutoCrafterProgressMenu) clickedInv.getHolder();
         ItemStack cursor = menu.click(e.getRawSlot(), e.getCursor());
         e.setCursor(cursor);
         if (autoCrafterManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {
@@ -161,7 +196,20 @@ public class AutoCrafterListener implements Listener {
     @EventHandler
     public void onRecipeMenuClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (e.getClickedInventory() == null || !(e.getClickedInventory().getHolder() instanceof AutoCrafterRecipeMenu)) {
+        Inventory inv = e.getInventory();
+        Inventory clickedInv = e.getClickedInventory();
+        if (inv.getHolder() instanceof AutoCrafterRecipeMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+        if (clickedInv != null && clickedInv.getHolder() instanceof AutoCrafterRecipeMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }else {
             return;
         }
         e.setCancelled(true);
@@ -172,7 +220,7 @@ public class AutoCrafterListener implements Listener {
             player.sendMessage(editor.getMessage());
             return;
         }
-        AutoCrafterRecipeMenu menu = (AutoCrafterRecipeMenu) e.getClickedInventory().getHolder();
+        AutoCrafterRecipeMenu menu = (AutoCrafterRecipeMenu) clickedInv.getHolder();
         ItemStack cursor = menu.click(player, e.getRawSlot(), e.getCursor());
         e.setCursor(cursor);
         if (autoCrafterManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {

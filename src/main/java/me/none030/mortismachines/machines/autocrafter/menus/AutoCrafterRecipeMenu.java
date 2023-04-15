@@ -6,6 +6,7 @@ import me.none030.mortismachines.machines.autocrafter.AutoCrafterMachine;
 import me.none030.mortismachines.machines.autocrafter.AutoCrafterManager;
 import me.none030.mortismachines.machines.autocrafter.recipes.AutoCrafterDefaultRecipe;
 import me.none030.mortismachines.machines.autocrafter.recipes.AutoCrafterRecipe;
+import me.none030.mortismachines.utils.MessageUtils;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -42,7 +43,13 @@ public class AutoCrafterRecipeMenu implements InventoryHolder {
     }
 
     private void create() {
-        menu = Bukkit.createInventory(this, 54, Component.text(autoCrafterManager.getMenuItems().getTitle()));
+        Machine machine = autoCrafterManager.getMachineById().get(data.getId());
+        if (!(machine instanceof AutoCrafterMachine)) {
+            return;
+        }
+        MessageUtils utils = new MessageUtils(autoCrafterManager.getRecipeMenuItems().getTitle());
+        utils.replace("%name%", ((AutoCrafterMachine) machine).getName());
+        menu = Bukkit.createInventory(this, 54, Component.text(utils.getMessage()));
         update(data);
     }
 

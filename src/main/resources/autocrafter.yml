@@ -13,7 +13,7 @@ auto-crafter-machine:
     default: "&aSwitched to default recipe"
     max: "&aSwitched to max recipe"
   menu:
-    title: "&aAuto Crafter"
+    title: "&a%name% Menu"
     filter: FILTER
     manual-mode: MANUAL_MODE
     redstone-mode: REDSTONE_MODE
@@ -24,13 +24,13 @@ auto-crafter-machine:
     progress: PROGRESS
     recipe: RECIPE
   progress-menu:
-    title: "&aAuto Crafter Progress"
+    title: "&a%name% Progress Menu"
     filter: FILTER
     animation: ANIMATION
     animation-2: ANIMATION_2
     animation-3: ANIMATION_3
   recipe-menu:
-    title: "&aAuto Crafter Recipe"
+    title: "&a%name% Recipe Menu"
     filter: FILTER
     default: DEFAULT_GRID
     max: MAX_GRID
@@ -38,8 +38,11 @@ auto-crafter-machine:
     accept: ACCEPT
   machines:
     EXAMPLE_MACHINE:
+      name: "&aExample Machine"
       structures:
         - AUTO_CRAFTER
+      progress-type: REMOVE_AND_ADD # REMOVE | REMOVE_AND_ADD
+      restoration-type: SINGLE # STACK | SINGLE
       require-fuel: true
       fuels:
         - COAL:10
@@ -50,8 +53,11 @@ auto-crafter-machine:
           - example_recipes
           - hazmat_armor
     EXAMPLE_MACHINE_2:
+      name: "&aArmor Machine"
       structures:
         - AUTO_CRAFTER_2
+      progress-type: REMOVE # REMOVE | REMOVE_AND_ADD
+      restoration-type: STACK # STACK | SINGLE
       require-fuel: true
       fuels:
         - COAL:10
@@ -61,8 +67,11 @@ auto-crafter-machine:
         max:
           - example_armor
     EXAMPLE_MACHINE_3:
+      name: "&aGlobal Machine"
       structures:
         - AUTO_CRAFTER_3
+      progress-type: REMOVE_AND_ADD # REMOVE | REMOVE_AND_ADD
+      restoration-type: STACK # STACK | SINGLE
       require-fuel: false
       fuels:
         - COAL:10
@@ -74,6 +83,9 @@ auto-crafter-machine:
           - hazmat_armor
         max:
           - example_armor
+
+
+
   recipes: # https://mcreator.net/wiki/list-vanilla-recipe-registry-name
     default:
       example_recipes:

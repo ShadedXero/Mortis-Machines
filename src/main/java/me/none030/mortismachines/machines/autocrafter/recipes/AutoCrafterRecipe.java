@@ -144,7 +144,96 @@ public abstract class AutoCrafterRecipe {
         return grid;
     }
 
-    public void addItems(Inventory inv, AutoCrafterData data) {
+    public void addItem(int index, ItemStack item, AutoCrafterData data) {
+        if (item == null || item.getType().isAir()) {
+            return;
+        }
+        ItemStack[] grid = data.getGrid();
+        if (grid == null) {
+            return;
+        }
+        ItemStack ingredient = ingredients[index];
+        if (ingredient == null || ingredient.getType().equals(Material.AIR) || !item.isSimilar(ingredient)) {
+            return;
+        }
+        ItemStack gridItem = grid[index];
+        if (gridItem == null || gridItem.getType().equals(Material.AIR)) {
+            grid[index] = item.clone();
+            item.setAmount(0);
+        } else {
+            if (isFull(gridItem)) {
+                return;
+            }
+            int itemAmount = item.getAmount();
+            int gridItemAmount = gridItem.getAmount();
+            int maxAmount = gridItem.getMaxStackSize();
+            int space = maxAmount - gridItemAmount;
+            if (itemAmount > space) {
+                item.setAmount(item.getAmount() - space);
+                ItemStack cloned = item.clone();
+                cloned.setAmount(maxAmount);
+                grid[index] = cloned;
+            } else {
+                item.setAmount(gridItemAmount + itemAmount);
+                grid[index] = item.clone();
+                item.setAmount(0);
+            }
+        }
+        data.setGrid(grid);
+    }
+
+    public ItemStack addSingleItem(Inventory inv, ItemStack ingredient, ItemStack gridItem) {
+        for (ItemStack item : inv.getContents()) {
+            if (item == null || item.getType().isAir() || !item.isSimilar(ingredient)) {
+                continue;
+            }
+            if (gridItem == null || gridItem.getType().isAir()) {
+                ItemStack cloned = item.clone();
+                cloned.setAmount(1);
+                inv.removeItem(cloned);
+                return cloned;
+            }else {
+                if (isFull(gridItem)) {
+                    return null;
+                }
+                ItemStack cloned = item.clone();
+                cloned.setAmount(1);
+                inv.removeItem(cloned);
+                cloned.setAmount(gridItem.getAmount() + 1);
+                return cloned;
+            }
+        }
+        return null;
+    }
+
+    public void addItemsBySingle(Inventory inv, AutoCrafterData data) {
+        if (inv.isEmpty()) {
+            return;
+        }
+        ItemStack[] grid = data.getGrid();
+        if (grid == null) {
+            return;
+        }
+        boolean run = false;
+        for (int i = 0; i < size; i++) {
+            ItemStack ingredient = ingredients[i];
+            if (ingredient == null || ingredient.getType().isAir()) {
+                continue;
+            }
+            ItemStack gridItem = grid[i];
+            ItemStack item = addSingleItem(inv, ingredient, gridItem);
+            if (item != null) {
+                grid[i] = item;
+                run = true;
+            }
+        }
+        data.setGrid(grid);
+        if (run) {
+            addItemsBySingle(inv, data);
+        }
+    }
+
+    public void addItemsByStack(Inventory inv, AutoCrafterData data) {
         if (inv.isEmpty()) {
             return;
         }
@@ -174,14 +263,16 @@ public abstract class AutoCrafterRecipe {
                     int maxAmount = gridItem.getMaxStackSize();
                     int space = maxAmount - gridItemAmount;
                     if (itemAmount > space) {
-                        item.setAmount(item.getAmount() - space);
                         ItemStack cloned = item.clone();
+                        cloned.setAmount(item.getAmount() - space);
+                        inv.removeItem(cloned);
                         cloned.setAmount(maxAmount);
                         grid[i] = cloned;
                     }else {
                         inv.removeItem(item);
-                        item.setAmount(gridItemAmount + itemAmount);
-                        grid[i] = item;
+                        ItemStack cloned = item.clone();
+                        cloned.setAmount(gridItemAmount + itemAmount);
+                        grid[i] = cloned;
                     }
                 }
             }

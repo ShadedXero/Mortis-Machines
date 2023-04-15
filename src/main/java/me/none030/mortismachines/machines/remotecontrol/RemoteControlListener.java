@@ -1,8 +1,9 @@
 package me.none030.mortismachines.machines.remotecontrol;
 
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import me.none030.mortismachines.MortisMachines;
 import me.none030.mortismachines.machines.Machine;
-import me.none030.mortismachines.machines.idcard.IdCardMenu;
 import me.none030.mortismachines.machines.remotecontrol.remotes.ClickerRemote;
 import me.none030.mortismachines.machines.remotecontrol.remotes.DeadmanRemote;
 import me.none030.mortismachines.machines.remotecontrol.remotes.FlipFlopRemote;
@@ -67,6 +68,11 @@ public class RemoteControlListener implements Listener {
         Block block = e.getClickedBlock();
         if (block == null) {
             return;
+        }
+        if (plugin.hasTowny()) {
+            if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                return;
+            }
         }
         if (!remoteControlManager.getCores().contains(block.getLocation())) {
             remoteControlManager.delete(block.getLocation());
@@ -353,7 +359,20 @@ public class RemoteControlListener implements Listener {
     @EventHandler
     public void onMenuClick(InventoryClickEvent e) {
         Player player = (Player) e.getWhoClicked();
-        if (e.getClickedInventory() == null || !(e.getClickedInventory().getHolder() instanceof RemoteControlMenu)) {
+        Inventory inv = e.getInventory();
+        Inventory clickedInv = e.getClickedInventory();
+        if (inv.getHolder() instanceof RemoteControlMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }
+        if (clickedInv != null && clickedInv.getHolder() instanceof RemoteControlMenu) {
+            if (e.isShiftClick()) {
+                e.setCancelled(true);
+                return;
+            }
+        }else {
             return;
         }
         e.setCancelled(true);
@@ -364,7 +383,7 @@ public class RemoteControlListener implements Listener {
             player.sendMessage(editor.getMessage());
             return;
         }
-        RemoteControlMenu menu = (RemoteControlMenu) e.getClickedInventory().getHolder();
+        RemoteControlMenu menu = (RemoteControlMenu) clickedInv.getHolder();
         int slot = e.getRawSlot();
         ItemStack cursor = e.getCursor();
         menu.click(player, slot, cursor);

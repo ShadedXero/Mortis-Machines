@@ -1,5 +1,7 @@
 package me.none030.mortismachines.machines.sound;
 
+import com.palmergames.bukkit.towny.object.TownyPermission;
+import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import me.none030.mortismachines.MortisMachines;
 import me.none030.mortismachines.data.MachineData;
@@ -56,6 +58,11 @@ public class SoundListener implements Listener {
         Block block = e.getClickedBlock();
         if (block == null) {
             return;
+        }
+        if (plugin.hasTowny()) {
+            if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                return;
+            }
         }
         if (!soundManager.getCores().contains(block.getLocation())) {
             soundManager.delete(block.getLocation());

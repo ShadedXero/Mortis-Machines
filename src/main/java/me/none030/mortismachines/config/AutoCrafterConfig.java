@@ -204,6 +204,21 @@ public class AutoCrafterConfig {
                 }
                 structures.add(structure);
             }
+            MessageUtils utils = new MessageUtils(section.getString("name"));
+            utils.color();
+            String name = utils.getMessage();
+            AutoCrafterProgressType progressType;
+            try {
+                progressType = AutoCrafterProgressType.valueOf(section.getString("progress-type"));
+            }catch (IllegalArgumentException exp) {
+                continue;
+            }
+            AutoCrafterRestorationType restorationType;
+            try {
+                restorationType = AutoCrafterRestorationType.valueOf(section.getString("restoration-type"));
+            }catch (IllegalArgumentException exp) {
+                continue;
+            }
             boolean requireFuel = section.getBoolean("require-fuel");
             List<AutoCrafterFuel> fuels = new ArrayList<>();
             for (String rawFuel : new ArrayList<>(section.getStringList("fuels"))) {
@@ -254,7 +269,7 @@ public class AutoCrafterConfig {
                     maxRecipes.add(maxRecipe);
                 }
             }
-            AutoCrafterMachine machine = new AutoCrafterMachine(key, structures, requireFuel, fuels, defaultRecipes, maxRecipes);
+            AutoCrafterMachine machine = new AutoCrafterMachine(key, structures, name, progressType, restorationType, requireFuel, fuels, defaultRecipes, maxRecipes);
             configManager.getManager().getAutoCrafterManager().getMachines().add(machine);
             configManager.getManager().getAutoCrafterManager().getMachineById().put(key, machine);
         }
