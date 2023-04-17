@@ -5,6 +5,7 @@ import me.none030.mortismachines.structures.Structure;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -23,8 +24,16 @@ public class MachineListener implements Listener {
 
     @EventHandler
     public void onMachineBreak(BlockBreakEvent e) {
+        Player player = e.getPlayer();
         if (!e.isDropItems()) {
             return;
+        }
+        if (!player.hasPermission("mortismachines.access")) {
+            if (e.isCancelled()) {
+                return;
+            }
+        }else {
+            e.setCancelled(false);
         }
         Location loc = e.getBlock().getLocation();
         for (Location location : manager.getCores()) {
@@ -50,6 +59,9 @@ public class MachineListener implements Listener {
 
     @EventHandler
     public void onMachineExplode(BlockExplodeEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
         for (Location location : manager.getCores()) {
             for (Block block : e.blockList()) {
                 Location loc = block.getLocation();
@@ -75,6 +87,9 @@ public class MachineListener implements Listener {
 
     @EventHandler
     public void onEntityExplodeMachine(EntityExplodeEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
         for (Location location : manager.getCores()) {
             for (Block block : e.blockList()) {
                 Location loc = block.getLocation();
@@ -100,6 +115,9 @@ public class MachineListener implements Listener {
 
     @EventHandler
     public void onMachinePhysics(BlockPhysicsEvent e) {
+        if (e.isCancelled()) {
+            return;
+        }
         Block block = e.getBlock();
         Location loc = block.getLocation();
         for (Location location : manager.getCores()) {

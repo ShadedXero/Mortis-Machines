@@ -13,6 +13,7 @@ timer-machine:
     set-output-timer-expired: "&aThe output timer setting time has been expired"
     constant-mode: "&aThe machine has been set to constant mode"
     pulse-mode: "&aThe machine has been set to pulse mode"
+    switch: "&6[Towny] &cOutsiders aren't allowed to Switch"
   menu:
     title: "&aTimer Machine"
     filter: FILTER

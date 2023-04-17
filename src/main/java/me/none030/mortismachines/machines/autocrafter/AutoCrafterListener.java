@@ -34,10 +34,12 @@ public class AutoCrafterListener implements Listener {
     @EventHandler
     public void onMachineBuild(BlockPlaceEvent e) {
         Player player = e.getPlayer();
-        if (!player.isOp()) {
+        if (!player.hasPermission("mortismachines.access")) {
             if (e.isCancelled()) {
                 return;
             }
+        }else {
+            e.setCancelled(false);
         }
         Location location = e.getBlockPlaced().getLocation();
         for (Machine machine : autoCrafterManager.getMachines()) {
@@ -62,15 +64,21 @@ public class AutoCrafterListener implements Listener {
         if (block == null) {
             return;
         }
-        if (!player.isOp()) {
-            if (e.useInteractedBlock().equals(Event.Result.DENY) || !e.getAction().isRightClick() || player.isSneaking()) {
+        if (!e.getAction().isRightClick() || player.isSneaking()) {
+            return;
+        }
+        if (!player.hasPermission("mortismachines.access")) {
+            if (e.useInteractedBlock().equals(Event.Result.DENY) ) {
                 return;
             }
             if (plugin.hasTowny()) {
                 if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                    player.sendMessage(autoCrafterManager.getMessage("SWITCH"));
                     return;
                 }
             }
+        }else {
+            e.setCancelled(false);
         }
         if (!autoCrafterManager.getCores().contains(block.getLocation())) {
             autoCrafterManager.delete(block.getLocation());

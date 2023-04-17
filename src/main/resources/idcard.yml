@@ -25,6 +25,7 @@ id-card-machine:
     key-card-already-inserted: "&aPlease remove the current key card in order to assign a new one"
     editor-permission: "&aYou need to be the editor in order to use this"
     key-card-assigned: "&aAssigned the key card"
+    switch: "&6[Towny] &cOutsiders aren't allowed to Switch"
   menu:
     title: "&aId Card Machine"
     filter: FILTER

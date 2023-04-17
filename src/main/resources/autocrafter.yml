@@ -12,6 +12,7 @@ auto-crafter-machine:
     accepted: "&aAccepted the recipe"
     default: "&aSwitched to default recipe"
     max: "&aSwitched to max recipe"
+    switch: "&6[Towny] &cOutsiders aren't allowed to Switch"
   menu:
     title: "&a%name% Menu"
     filter: FILTER

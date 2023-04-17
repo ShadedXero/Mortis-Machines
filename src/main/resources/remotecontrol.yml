@@ -13,6 +13,7 @@ remote-control-machine:
     remote-use: "&aActivated the remote"
     detonator-armed: "&aThe deadman remote has been armed"
     detonator-unarmed: "&aThe deadman remote has been unarmed"
+    switch: "&6[Towny] &cOutsiders aren't allowed to Switch"
   menu:
     title: "&aRemote Control Machine"
     filter: FILTER

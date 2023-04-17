@@ -40,10 +40,12 @@ public class RemoteControlListener implements Listener {
     @EventHandler
     public void onMachineBuild(BlockPlaceEvent e) {
         Player player = e.getPlayer();
-        if (!player.isOp()) {
+        if (!player.hasPermission("mortismachines.access")) {
             if (e.isCancelled()) {
                 return;
             }
+        }else {
+            e.setCancelled(false);
         }
         Location location = e.getBlockPlaced().getLocation();
         for (Machine machine : remoteControlManager.getMachines()) {
@@ -68,15 +70,21 @@ public class RemoteControlListener implements Listener {
         if (block == null) {
             return;
         }
-        if (!player.isOp()) {
-            if (e.useInteractedBlock().equals(Event.Result.DENY) || !e.getAction().isRightClick() || player.isSneaking()) {
+        if (!e.getAction().isRightClick() || player.isSneaking()) {
+            return;
+        }
+        if (!player.hasPermission("mortismachines.access")) {
+            if (e.useInteractedBlock().equals(Event.Result.DENY)) {
                 return;
             }
             if (plugin.hasTowny()) {
                 if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                    player.sendMessage(remoteControlManager.getMessage("SWITCH"));
                     return;
                 }
             }
+        }else {
+            e.setCancelled(false);
         }
         if (!remoteControlManager.getCores().contains(block.getLocation())) {
             remoteControlManager.delete(block.getLocation());
