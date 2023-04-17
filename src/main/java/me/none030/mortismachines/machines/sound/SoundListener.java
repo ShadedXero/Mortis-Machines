@@ -29,10 +29,12 @@ public class SoundListener implements Listener {
 
     @EventHandler
     public void onMachineBuild(BlockPlaceEvent e) {
-        if (e.isCancelled()) {
-            return;
-        }
         Player player = e.getPlayer();
+        if (!player.isOp()) {
+            if (e.isCancelled()) {
+                return;
+            }
+        }
         Block block = e.getBlockPlaced();
         for (Machine machine : soundManager.getMachines()) {
             if (!(machine instanceof SoundMachine)) {
@@ -52,16 +54,18 @@ public class SoundListener implements Listener {
     @EventHandler
     public void onMachineInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (e.useInteractedBlock().equals(Event.Result.DENY) || !e.getAction().isRightClick() || player.isSneaking()) {
-            return;
-        }
         Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
-        if (plugin.hasTowny()) {
-            if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+        if (!player.isOp()) {
+            if (e.useInteractedBlock().equals(Event.Result.DENY) || !e.getAction().isRightClick() || player.isSneaking()) {
                 return;
+            }
+            if (plugin.hasTowny()) {
+                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                    return;
+                }
             }
         }
         if (!soundManager.getCores().contains(block.getLocation())) {

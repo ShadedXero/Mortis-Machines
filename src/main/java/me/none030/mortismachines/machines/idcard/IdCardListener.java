@@ -1,7 +1,5 @@
 package me.none030.mortismachines.machines.idcard;
 
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.object.Town;
 import com.palmergames.bukkit.towny.object.TownyPermission;
 import com.palmergames.bukkit.towny.utils.PlayerCacheUtil;
 import io.papermc.paper.event.player.AsyncChatEvent;
@@ -44,10 +42,12 @@ public class IdCardListener implements Listener {
 
     @EventHandler
     public void onMachineBuild(BlockPlaceEvent e) {
-        if (e.isCancelled()) {
-            return;
-        }
         Player player = e.getPlayer();
+        if (!player.isOp()) {
+            if (e.isCancelled()) {
+                return;
+            }
+        }
         Location location = e.getBlockPlaced().getLocation();
         for (Machine machine : idCardManager.getMachines()) {
             if (!(machine instanceof IdCardMachine)) {
@@ -68,16 +68,18 @@ public class IdCardListener implements Listener {
     @EventHandler
     public void onMachineInteract(PlayerInteractEvent e) {
         Player player = e.getPlayer();
-        if (e.useInteractedBlock().equals(Event.Result.DENY) || !e.getAction().isRightClick() || player.isSneaking()) {
-            return;
-        }
         Block block = e.getClickedBlock();
         if (block == null) {
             return;
         }
-        if (plugin.hasTowny()) {
-            if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+        if (!player.isOp()) {
+            if (e.useInteractedBlock().equals(Event.Result.DENY) || !e.getAction().isRightClick() || player.isSneaking()) {
                 return;
+            }
+            if (plugin.hasTowny()) {
+                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                    return;
+                }
             }
         }
         if (!idCardManager.getCores().contains(block.getLocation())) {
