@@ -19,6 +19,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -59,6 +60,9 @@ public class AutoCrafterListener implements Listener {
 
     @EventHandler
     public void onMachineInteract(PlayerInteractEvent e) {
+        if (e.getHand() == null || !e.getHand().equals(EquipmentSlot.HAND)) {
+            return;
+        }
         Player player = e.getPlayer();
         Block block = e.getClickedBlock();
         if (block == null) {
@@ -66,19 +70,6 @@ public class AutoCrafterListener implements Listener {
         }
         if (!e.getAction().isRightClick() || player.isSneaking()) {
             return;
-        }
-        if (!player.hasPermission("mortismachines.access")) {
-            if (e.useInteractedBlock().equals(Event.Result.DENY) ) {
-                return;
-            }
-            if (plugin.hasTowny()) {
-                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
-                    player.sendMessage(autoCrafterManager.getMessage("SWITCH"));
-                    return;
-                }
-            }
-        }else {
-            e.setCancelled(false);
         }
         if (!autoCrafterManager.getCores().contains(block.getLocation())) {
             autoCrafterManager.delete(block.getLocation());
@@ -95,6 +86,19 @@ public class AutoCrafterListener implements Listener {
         Structure structure = machine.getStructure(data.getStructureId());
         if (structure == null || !structure.isStructure(data.getCore(), true)) {
             return;
+        }
+        if (!player.hasPermission("mortismachines.access")) {
+            if (e.useInteractedBlock().equals(Event.Result.DENY) ) {
+                return;
+            }
+            if (plugin.hasTowny()) {
+                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                    player.sendMessage(autoCrafterManager.getMessage("SWITCH"));
+                    return;
+                }
+            }
+        }else {
+            e.setCancelled(false);
         }
         AutoCrafterMenu menu = new AutoCrafterMenu(autoCrafterManager, data);
         menu.open(player);

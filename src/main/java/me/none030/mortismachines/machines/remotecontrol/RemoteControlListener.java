@@ -23,6 +23,7 @@ import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -65,6 +66,9 @@ public class RemoteControlListener implements Listener {
 
     @EventHandler
     public void onMachineInteract(PlayerInteractEvent e) {
+        if (e.getHand() == null || !e.getHand().equals(EquipmentSlot.HAND)) {
+            return;
+        }
         Player player = e.getPlayer();
         Block block = e.getClickedBlock();
         if (block == null) {
@@ -72,19 +76,6 @@ public class RemoteControlListener implements Listener {
         }
         if (!e.getAction().isRightClick() || player.isSneaking()) {
             return;
-        }
-        if (!player.hasPermission("mortismachines.access")) {
-            if (e.useInteractedBlock().equals(Event.Result.DENY)) {
-                return;
-            }
-            if (plugin.hasTowny()) {
-                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
-                    player.sendMessage(remoteControlManager.getMessage("SWITCH"));
-                    return;
-                }
-            }
-        }else {
-            e.setCancelled(false);
         }
         if (!remoteControlManager.getCores().contains(block.getLocation())) {
             remoteControlManager.delete(block.getLocation());
@@ -101,6 +92,19 @@ public class RemoteControlListener implements Listener {
         Structure structure = machine.getStructure(data.getStructureId());
         if (structure == null || !structure.isStructure(data.getCore(), false)) {
             return;
+        }
+        if (!player.hasPermission("mortismachines.access")) {
+            if (e.useInteractedBlock().equals(Event.Result.DENY)) {
+                return;
+            }
+            if (plugin.hasTowny()) {
+                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                    player.sendMessage(remoteControlManager.getMessage("SWITCH"));
+                    return;
+                }
+            }
+        }else {
+            e.setCancelled(false);
         }
         RemoteControlMenu menu = new RemoteControlMenu(remoteControlManager, data);
         menu.open(player);

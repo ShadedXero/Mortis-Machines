@@ -16,6 +16,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class SoundListener implements Listener {
@@ -55,6 +56,9 @@ public class SoundListener implements Listener {
 
     @EventHandler
     public void onMachineInteract(PlayerInteractEvent e) {
+        if (e.getHand() == null || !e.getHand().equals(EquipmentSlot.HAND)) {
+            return;
+        }
         Player player = e.getPlayer();
         Block block = e.getClickedBlock();
         if (block == null) {
@@ -62,19 +66,6 @@ public class SoundListener implements Listener {
         }
         if (!e.getAction().isRightClick() || player.isSneaking()) {
             return;
-        }
-        if (!player.hasPermission("mortismachines.access")) {
-            if (e.useInteractedBlock().equals(Event.Result.DENY)) {
-                return;
-            }
-            if (plugin.hasTowny()) {
-                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
-                    player.sendMessage(soundManager.getMessage("SWITCH"));
-                    return;
-                }
-            }
-        }else {
-            e.setCancelled(false);
         }
         if (!soundManager.getCores().contains(block.getLocation())) {
             soundManager.delete(block.getLocation());
@@ -91,6 +82,19 @@ public class SoundListener implements Listener {
         Structure structure = machine.getStructure(data.getStructureId());
         if (structure == null || !structure.isStructure(data.getCore(), true)) {
             return;
+        }
+        if (!player.hasPermission("mortismachines.access")) {
+            if (e.useInteractedBlock().equals(Event.Result.DENY)) {
+                return;
+            }
+            if (plugin.hasTowny()) {
+                if (!PlayerCacheUtil.getCachePermission(player, block.getLocation(), block.getType(), TownyPermission.ActionType.SWITCH)) {
+                    player.sendMessage(soundManager.getMessage("SWITCH"));
+                    return;
+                }
+            }
+        }else {
+            e.setCancelled(false);
         }
         soundManager.getDataByPlayer().put(player.getUniqueId(), data);
         player.sendMessage(soundManager.getMessage("SET_MESSAGE"));
