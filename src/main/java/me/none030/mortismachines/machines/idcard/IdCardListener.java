@@ -235,7 +235,7 @@ public class IdCardListener implements Listener {
         int slot = e.getRawSlot();
         ItemStack cursor = e.getCursor();
         ItemStack item = menu.click(player, slot, cursor);
-        e.setCursor(item);
+        player.setItemOnCursor(item);
         if (idCardManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {
             idCardManager.getPlayersInMenuCoolDown().put(player.getUniqueId(), 1);
         }else {

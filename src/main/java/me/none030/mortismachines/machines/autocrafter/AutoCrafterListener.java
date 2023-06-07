@@ -162,7 +162,7 @@ public class AutoCrafterListener implements Listener {
         }
         AutoCrafterMenu menu = (AutoCrafterMenu) clickedInv.getHolder();
         ItemStack cursor = menu.click(player, e.getRawSlot(), e.getCursor());
-        e.setCursor(cursor);
+        player.setItemOnCursor(cursor);
         if (autoCrafterManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {
             autoCrafterManager.getPlayersInMenuCoolDown().put(player.getUniqueId(), 1);
         }else {
@@ -200,7 +200,7 @@ public class AutoCrafterListener implements Listener {
         }
         AutoCrafterProgressMenu menu = (AutoCrafterProgressMenu) clickedInv.getHolder();
         ItemStack cursor = menu.click(e.getRawSlot(), e.getCursor());
-        e.setCursor(cursor);
+        player.setItemOnCursor(cursor);
         if (autoCrafterManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {
             autoCrafterManager.getPlayersInMenuCoolDown().put(player.getUniqueId(), 1);
         }else {
@@ -238,7 +238,7 @@ public class AutoCrafterListener implements Listener {
         }
         AutoCrafterRecipeMenu menu = (AutoCrafterRecipeMenu) clickedInv.getHolder();
         ItemStack cursor = menu.click(player, e.getRawSlot(), e.getCursor());
-        e.setCursor(cursor);
+        player.setItemOnCursor(cursor);
         if (autoCrafterManager.getPlayersInMenuCoolDown().get(player.getUniqueId()) == null) {
             autoCrafterManager.getPlayersInMenuCoolDown().put(player.getUniqueId(), 1);
         }else {

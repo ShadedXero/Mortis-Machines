@@ -1,6 +1,10 @@
 package me.none030.mortismachines.machines.autocrafter.recipes;
 
+import me.none030.mortishoppers.data.HopperData;
+import me.none030.mortishoppers.utils.HopperMode;
+import me.none030.mortismachines.MortisMachines;
 import me.none030.mortismachines.machines.autocrafter.AutoCrafterData;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
@@ -10,6 +14,7 @@ import java.util.Map;
 
 public abstract class AutoCrafterRecipe {
 
+    private final MortisMachines plugin = MortisMachines.getInstance();
     private final NamespacedKey key;
     private final ItemStack[] ingredients;
     private final ItemStack result;
@@ -284,9 +289,25 @@ public abstract class AutoCrafterRecipe {
         if (inv.firstEmpty() == -1) {
             return;
         }
+        Location location = inv.getLocation();
+        if (location == null) {
+            return;
+        }
         ItemStack result = data.getResult();
         if (result == null) {
             return;
+        }
+        if (plugin.hasHopper()) {
+            HopperData hopperData = new HopperData(location);
+            if (hopperData.getMode().equals(HopperMode.WHITELIST)) {
+                if (!hopperData.canGoThrough(result)) {
+                    return;
+                }
+            } else {
+                if (hopperData.canGoThrough(result)) {
+                    return;
+                }
+            }
         }
         inv.addItem(result);
         data.setResult(null);

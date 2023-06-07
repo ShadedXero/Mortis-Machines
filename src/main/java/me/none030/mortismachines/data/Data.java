@@ -9,17 +9,17 @@ import org.bukkit.block.Block;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
-public class Data {
+public abstract class Data {
 
     private final MortisMachines plugin = MortisMachines.getInstance();
-    private final Block block;
+    private final Location core;
 
     public Data(Block block) {
-        this.block = block;
+        this.core = block.getLocation();
     }
 
     public Data(Location location) {
-        this.block = location.getBlock();
+        this.core = location;
     }
 
     public boolean isMachine(MachineType type) {
@@ -37,13 +37,13 @@ public class Data {
     }
 
     public String get(String key) {
-        CustomBlockData data = new CustomBlockData(block, plugin);
+        CustomBlockData data = new CustomBlockData(core.getBlock(), plugin);
         NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
         return data.get(namespacedKey, PersistentDataType.STRING);
     }
 
     public void set(String key, String value) {
-        CustomBlockData data = new CustomBlockData(block, plugin);
+        CustomBlockData data = new CustomBlockData(core.getBlock(), plugin);
         NamespacedKey namespacedKey = new NamespacedKey(plugin, key);
         if (value == null) {
             data.remove(namespacedKey);
@@ -53,7 +53,11 @@ public class Data {
     }
 
     public void delete() {
-        CustomBlockData data = new CustomBlockData(block, plugin);
+        CustomBlockData data = new CustomBlockData(core.getBlock(), plugin);
         data.clear();
+    }
+
+    public Location getCore() {
+        return core;
     }
 }

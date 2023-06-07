@@ -3,20 +3,17 @@ package me.none030.mortismachines.data;
 import me.none030.mortismachines.utils.MachineType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Base64;
 
-public class MachineData {
+public class MachineData extends Data{
 
-    private final Location core;
     private final MachineType type;
     private final String machineKey = "MortisMachines";
     private final String idKey = "MortisMachinesId";
@@ -25,12 +22,8 @@ public class MachineData {
     private final String taskKey = "MortisMachinesTask";
 
     public MachineData(Location core, MachineType type) {
-        this.core = core;
+        super(core);
         this.type = type;
-    }
-
-    public Location getCore() {
-        return core;
     }
 
     public void create(String id, String structureId) {
@@ -85,23 +78,7 @@ public class MachineData {
     }
 
     public boolean isMachine() {
-        Data data = new Data(core);
-        return data.isMachine(type);
-    }
-
-    public String get(String id) {
-        Data data = new Data(core);
-        return data.get(id);
-    }
-
-    public void set(String id, String value) {
-        Data data = new Data(core);
-        data.set(id, value);
-    }
-
-    public void delete() {
-        Data data = new Data(core);
-        data.delete();
+        return isMachine(type);
     }
 
     public String serialize(ItemStack item) {
