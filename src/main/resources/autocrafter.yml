@@ -1,0 +1,116 @@
+auto-crafter-machine:
+  enabled: true
+  messages:
+    machine-build: "&aThe auto crafter machine has been built"
+    open-progress-menu: "&aOpened the progress menu"
+    open-recipe-menu: "&aOpened the recipe menu"
+    redstone-mode: "&aRedstone mode activated"
+    manual-mode: "&aManual mode activated"
+    offline: "&aThe machine is offline"
+    online: "&aThe machine is online"
+    cancelled: "&aCancelled the recipe"
+    accepted: "&aAccepted the recipe"
+    default: "&aSwitched to default recipe"
+    max: "&aSwitched to max recipe"
+    switch: "&6[Towny] &cOutsiders aren't allowed to Switch"
+  menu:
+    title: "&a%name% Menu"
+    filter: FILTER
+    manual-mode: MANUAL_MODE
+    redstone-mode: REDSTONE_MODE
+    online: ONLINE
+    offline: OFFLINE
+    no-fuel: NO_FUEL
+    fuel-not-required: FUEL_NOT_REQUIRED
+    progress: PROGRESS
+    recipe: RECIPE
+  progress-menu:
+    title: "&a%name% Progress Menu"
+    filter: FILTER
+    animation: ANIMATION
+    animation-2: ANIMATION_2
+    animation-3: ANIMATION_3
+  recipe-menu:
+    title: "&a%name% Recipe Menu"
+    filter: FILTER
+    default: DEFAULT_GRID
+    max: MAX_GRID
+    cancel: CANCEL
+    accept: ACCEPT
+  machines:
+    EXAMPLE_MACHINE:
+      name: "&aExample Machine"
+      structures:
+        - AUTO_CRAFTER
+      progress-type: REMOVE_AND_ADD # REMOVE | REMOVE_AND_ADD
+      restoration-type: SINGLE # STACK | SINGLE
+      require-fuel: true
+      fuels:
+        - COAL:10
+      time-multiplier: 1.5
+      power-multiplier: 0.5
+      recipes:
+        default:
+          - example_recipes
+          - hazmat_armor
+    EXAMPLE_MACHINE_2:
+      name: "&aArmor Machine"
+      structures:
+        - AUTO_CRAFTER_2
+      progress-type: REMOVE # REMOVE | REMOVE_AND_ADD
+      restoration-type: STACK # STACK | SINGLE
+      require-fuel: true
+      fuels:
+        - COAL:10
+      time-multiplier: 1.5
+      power-multiplier: 0.5
+      recipes:
+        max:
+          - example_armor
+    EXAMPLE_MACHINE_3:
+      name: "&aGlobal Machine"
+      structures:
+        - AUTO_CRAFTER_3
+      progress-type: REMOVE_AND_ADD # REMOVE | REMOVE_AND_ADD
+      restoration-type: STACK # STACK | SINGLE
+      require-fuel: false
+      fuels:
+        - COAL:10
+      time-multiplier: 1.5
+      power-multiplier: 0.5
+      recipes:
+        default:
+          - example_recipes
+          - hazmat_armor
+        max:
+          - example_armor
+
+
+
+  recipes: # https://mcreator.net/wiki/list-vanilla-recipe-registry-name
+    default:
+      example_recipes:
+        time: 5
+        power: 10
+        recipes:
+          - minecraft:gold_block
+          - minecraft:diamond_block
+      hazmat_armor:
+        time: 5
+        power: 10
+        recipes:
+          - mortismachines:hazmat_helemet
+          - mortismachines:hazmat_chestplate
+          - mortismachines:hazmat_leggings
+          - mortismachines:hazmat_boots
+    max:
+      example_armor:
+        time: 5
+        power: 10
+        recipes:
+          - mortismachines:example_helmet
+          - mortismachines:example_chestplate
+          - mortismachines:example_leggings
+          - mortismachines:example_boots
+
+

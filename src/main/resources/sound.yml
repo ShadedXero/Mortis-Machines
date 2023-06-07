@@ -1,0 +1,25 @@
+sound-machine:
+  enabled: true
+  messages:
+    machine-build: "&aThe sound machine has been created."
+    set-message: "&aType the message in chat that you want to set to this machine"
+    set-message-expired: "&aYour message setting time has been expired"
+    message-set: "&aThe message has been changed for this machine"
+    switch: "&6[Towny] &cOutsiders aren't allowed to Switch"
+  machines:
+    EXAMPLE_MACHINE:
+      structures:
+        - SOUND
+      range: 100
+      cooldown: 5 # in Seconds
+      blacklist: # Blacklisted words
+        - "Test"
+        - "Test2"
+    EXAMPLE_MACHINE_2:
+      structures:
+        - SOUND_2
+      range: 50
+      cooldown: 10 # in Seconds
+      blacklist: # Blacklisted words
+        - "Test"
+        - "Test2"
