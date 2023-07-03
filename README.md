@@ -9,7 +9,8 @@ Timer Machine sends out a redstone signal when the specified time comes and runs
 
 Remote Control Machine sends out a redstone signal when a player assigns a remote to the machine and interact with the remote to send out a redstone signal. The remotes can be assigned and unassigned using the menu for remote control machine. Has 3 types of remotes, FlipFlop Remote, Clicker Remote and Deadman Remote.
 
-Id Card Machine sends out a redstone signal when a player assigns a id card to the machine and inserts a id card in the machine to send out a redstone signal and stops with a configured delay. The id card can be assigned and inserted and the editors and be added and removed using the menu for id card machine.
+Id Card Machine sends out a redstone signal when a player assigns a id card to the machine and inserts a id card in the machine to send out a redstone signal and stops with a configured delay. The id card can be assigned and inserted and the editors and be added and removed using the menu for[Recipes1182.txt](https://github.com/None030/Mortis-Machines/files/11940288/Recipes1182.txt)
+ id card machine.
 
 Auto Crafter Machine can craft the configured items for the machine. The recipe can be inserted using the menu and players can view the progression using the menu for auto crafter machine.
 
@@ -19,3 +20,6 @@ Everything is customizable in the config.yml. If you find any bugs or something 
 
 Dependencies:
 - ProtocolLib
+
+Default Recipes:
+[Default Recipes.txt](https://github.com/None030/Mortis-Machines/files/11940291/Recipes1182.txt)
