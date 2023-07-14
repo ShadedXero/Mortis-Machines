@@ -73,5 +73,6 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.bytebuddy:byte-buddy:1.12.8" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.palmergames.bukkit.towny:towny:0.99.0.0" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: me.none030:MortisHoppers:1.0" level="project" />
+    <orderEntry type="library" name="Maven: com.h2database:h2:2.2.220" level="project" />
   </component>
 </module>

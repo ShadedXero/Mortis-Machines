@@ -1,6 +1,6 @@
 name: MortisMachines
 version: '${project.version}'
-main: me.none030.mortismachines.MortisMachines
+main: com.mortisdevelopment.mortismachines.MortisMachines
 api-version: 1.13
 depend:
   - ProtocolLib

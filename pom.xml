@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.none030</groupId>
+    <groupId>com.mortisdevelopment</groupId>
     <artifactId>MortisMachines</artifactId>
-    <version>1.4</version>
+    <version>1.5</version>
     <packaging>jar</packaging>
 
     <name>MortisMachines</name>
@@ -41,7 +41,7 @@
                             <relocations>
                                 <relocation>
                                     <pattern>com.jeff_media.customblockdata</pattern>
-                                    <shadedPattern>me.none030.mortismachines.customblockdata</shadedPattern>
+                                    <shadedPattern>com.mortisdevelopment.mortismachines.customblockdata</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
@@ -107,6 +107,12 @@
             <artifactId>MortisHoppers</artifactId>
             <version>1.0</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>2.2.220</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

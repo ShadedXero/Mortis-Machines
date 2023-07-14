@@ -237,3 +237,11 @@ items:
     material: BLUE_STAINED_GLASS_PANE
     amount: 1
     name: "&bFuel Not Required"
+  MYSTIC_SHRINE:
+    material: QUARTZ_BLOCK
+    amount: 1
+    name: "&aMystic Shrine"
+  CRYSTAL_PRISM:
+    material: DIAMOND_BLOCK
+    amount: 1
+    name: "&aCrystal Prism"

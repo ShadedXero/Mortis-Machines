@@ -17,6 +17,7 @@ id-card-machine:
     remove-editor-expired: "&aThe editor removing time has been expired"
     no-editors: "&aThere are no editors"
     key-card-inserted: "&aInserted the key card"
+    key-card-removed: "&aRemoved the key card"
     wrong-key-card: "&aPlease enter a valid key card"
     set-timer: "&aPlease enter a time(number) in seconds that you want to set"
     set-timer-expired: "&aThe timer setting time has been expired"
