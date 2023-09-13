@@ -45,7 +45,7 @@ public class CustomBlockListener implements Listener {
         if (customBlock == null) {
             return;
         }
-        e.setCancelled(true);
+        e.setDropItems(false);
         customBlock.dropCustomBlock(e.getBlock().getLocation());
     }
 }

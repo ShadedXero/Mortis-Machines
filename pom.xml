@@ -6,7 +6,7 @@
 
     <groupId>com.mortisdevelopment</groupId>
     <artifactId>MortisMachines</artifactId>
-    <version>1.5</version>
+    <version>1.8</version>
     <packaging>jar</packaging>
 
     <name>MortisMachines</name>
@@ -42,6 +42,10 @@
                                 <relocation>
                                     <pattern>com.jeff_media.customblockdata</pattern>
                                     <shadedPattern>com.mortisdevelopment.mortismachines.customblockdata</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.h2</pattern>
+                                    <shadedPattern>com.mortisdevelopment.mortismachines.h2</shadedPattern>
                                 </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>

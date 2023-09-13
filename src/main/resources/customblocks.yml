@@ -2,8 +2,8 @@ custom-blocks:
   MYSTIC_SHRINE:
     item: MYSTIC_SHRINE
     keys:
-      - MYSTIC_SHRINE
+      - mystic_shrine
   CRYSTAL_PRISM:
     item: CRYSTAL_PRISM
     keys:
-      - CRYSTAL_PRISM
+      - crystal_prism
